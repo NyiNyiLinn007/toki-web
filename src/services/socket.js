@@ -6,7 +6,7 @@ class SocketService {
     connect(token) {
         if (this.socket) return this.socket;
 
-        this.socket = io('http://localhost:4500', {
+        this.socket = io('https://toki-backend-78ds.onrender.com', {
             auth: { token },
             transports: ['websocket'],
         });
