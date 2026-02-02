@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:4500/api',
+    baseURL: 'https://toki-backend-78ds.onrender.com/api',
 });
 
 import toast from 'react-hot-toast';
