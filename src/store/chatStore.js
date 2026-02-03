@@ -154,21 +154,29 @@ const useChatStore = create((set, get) => ({
         }
     },
 
-    updateMessage: (messageId, newContent, partnerId) => {
-        const { messages } = get();
-        if (messages[partnerId]) {
-            const newMessagesList = messages[partnerId].map(msg => {
-                if (msg.id === messageId) {
-                    return { ...msg, content: newContent, isEdited: true };
-                }
-                return msg;
-            });
-            set({
-                messages: {
-                    ...messages,
-                    [partnerId]: newMessagesList
-                }
-            });
+    updateMessage: (messageId, newContent, senderId) => {
+        const { messages, activeConversation } = get();
+
+        // The message could be in the active conversation's messages
+        // We need to find which conversation contains this message
+        const updatedMessages = { ...messages };
+        let found = false;
+
+        for (const [partnerId, messageList] of Object.entries(messages)) {
+            const msgIndex = messageList.findIndex(msg => msg.id === messageId);
+            if (msgIndex !== -1) {
+                updatedMessages[partnerId] = messageList.map(msg =>
+                    msg.id === messageId
+                        ? { ...msg, content: newContent, isEdited: true }
+                        : msg
+                );
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            set({ messages: updatedMessages });
         }
     }
 }));
