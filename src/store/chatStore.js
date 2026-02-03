@@ -12,6 +12,10 @@ const useChatStore = create((set, get) => ({
     setConversations: (conversations) => set({ conversations }),
 
     setActiveConversation: (user) => {
+        if (!user) {
+            set({ activeConversation: null });
+            return;
+        }
         set({ activeConversation: user });
         if (!get().messages[user.id]) {
             get().fetchMessages(user.id);
@@ -130,6 +134,42 @@ const useChatStore = create((set, get) => ({
         }
 
         set({ conversations: newConversations, activeConversation: newActive });
+    },
+
+    markMessagesAsRead: (userId, messageIds) => {
+        const { messages } = get();
+        if (messages[userId]) {
+            const newMessagesList = messages[userId].map(msg => {
+                if (messageIds.includes(msg.id)) {
+                    return { ...msg, isRead: true, readAt: new Date().toISOString() };
+                }
+                return msg;
+            });
+            set({
+                messages: {
+                    ...messages,
+                    [userId]: newMessagesList
+                }
+            });
+        }
+    },
+
+    updateMessage: (messageId, newContent, partnerId) => {
+        const { messages } = get();
+        if (messages[partnerId]) {
+            const newMessagesList = messages[partnerId].map(msg => {
+                if (msg.id === messageId) {
+                    return { ...msg, content: newContent, isEdited: true };
+                }
+                return msg;
+            });
+            set({
+                messages: {
+                    ...messages,
+                    [partnerId]: newMessagesList
+                }
+            });
+        }
     }
 }));
 

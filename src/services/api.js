@@ -2,8 +2,8 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-// Base URL: prefer env var for different environments, fallback to your Render URL
-const baseURL = 'https://toki-backend-78ds.onrender.com/api';
+// Base URL: use env var for Vercel, fallback to Render URL
+const baseURL = import.meta.env.VITE_API_URL || 'https://toki-backend-78ds.onrender.com/api';
 
 const api = axios.create({
   baseURL,

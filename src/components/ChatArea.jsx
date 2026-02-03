@@ -125,8 +125,9 @@ export default function ChatArea() {
                     </div>
                     <div>
                         <h3 className="font-bold text-gray-900">{activeConversation.username}</h3>
-                        <div className="flex items-center text-xs text-green-500">
-                            <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span> Online
+                        <div className={cn("flex items-center text-xs", activeConversation.isOnline ? "text-green-500" : "text-gray-400")}>
+                            <span className={cn("w-2 h-2 rounded-full mr-1", activeConversation.isOnline ? "bg-green-500" : "bg-gray-400")}></span>
+                            {activeConversation.isOnline ? "Online" : "Offline"}
                         </div>
                     </div>
                 </div>

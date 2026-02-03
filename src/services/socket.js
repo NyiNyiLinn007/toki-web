@@ -1,14 +1,16 @@
 import io from 'socket.io-client';
 
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'https://toki-backend-78ds.onrender.com';
+
 class SocketService {
     socket = null;
 
     connect(token) {
         if (this.socket) return this.socket;
 
-        this.socket = io('https://toki-backend-78ds.onrender.com', {
+        this.socket = io(SOCKET_URL, {
             auth: { token },
-            transports: ['websocket'],
+            transports: ['websocket', 'polling'], // Allow fallback to polling
         });
 
         this.socket.on('connect', () => {
